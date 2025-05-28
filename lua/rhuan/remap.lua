@@ -6,17 +6,15 @@ vim.api.nvim_set_keymap('n', '<Leader>e', ':NvimTreeFocus<CR>', { noremap = true
 -- Alternar entre o NvimTree e o arquivo
 vim.api.nvim_set_keymap('n', '<Leader>t', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 -- alternar para mostrar o numero da linha sem ser relativa
-vim.api.nvim_set_keymap('n', '<Leader>n', ':set norelativenumber<CR>', { noremap = true, silent = true })
+function ToggleNumber()
+  vim.wo.number = true
+  vim.wo.relativenumber = not vim.wo.relativenumber
+end
+vim.api.nvim_set_keymap('n', '<Leader>n', ':lua ToggleNumber()<CR>', { noremap = true, silent = true })
+
 
 vim.api.nvim_set_keymap('n', '<Leader>n', ':lua ToggleNumber()<CR>', { noremap = true, silent = true })
 
-function ToggleNumber()
-    if vim.wo.number then
-        vim.wo.relativenumber = true
-    else
-        vim.wo.relativenumber = false
-    end
-end
 
 -- trocar j por k
 vim.keymap.set('', 'j', 'k', { noremap = true })

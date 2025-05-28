@@ -106,6 +106,12 @@ return {
       require("lspconfig")["ts_ls"].setup{}  -- Para TypeScript
       require("lspconfig")["clangd"].setup{}   -- Para C++
       require("lspconfig")["jdtls"].setup{}    -- Para Java
+      require("lspconfig")["solidity"].setup{
+        cmd = { "solidity-language-server", "--stdio" },
+        filetypes = { "solidity" },
+        root_dir = require("lspconfig").util.root_pattern("truffle-config.js", "hardhat.config.js", ".git"),
+      }
+
     end
   },
 
