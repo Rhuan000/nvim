@@ -33,5 +33,11 @@ vim.api.nvim_set_keymap('n', '<Leader>2', ':lua require("harpoon.ui").nav_file(2
 vim.api.nvim_set_keymap('n', '<Leader>3', ':lua require("harpoon.ui").nav_file(3)<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>4', ':lua require("harpoon.ui").nav_file(4)<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<Leader>h', ':lua require("harpoon.ui").toggle_quick_menu()<CR>', { noremap = true, silent = true })        --
-
+--mostrar o Erro do LSP
+vim.keymap.set("n", "<leader>i", function()
+  vim.diagnostic.open_float(nil, { focusable = false })
+end, { desc = "Mostrar erro LSP flutuante" })
+-- Error do diagnostic mover o cursor pro local exato
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Próximo erro/aviso" })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Erro/aviso anterior" })
 

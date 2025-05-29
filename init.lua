@@ -5,6 +5,38 @@ vim.opt.relativenumber = true  -- Enable relative line numbers
 
 
 
+-- enabling dianostics in files
+vim.diagnostic.config({
+  virtual_text = {
+    prefix = "󰌵", -- só o símbolo, sem mensagem
+    spacing =0,
+     format = function(diag)
+      return ""  -- retorna string vazia para não mostrar mensagem
+    end,
+  },
+  virtual_text = true,
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '',
+      [vim.diagnostic.severity.WARN] = '',
+    },
+    linehl = {
+      [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+    },
+    numhl = {
+      [vim.diagnostic.severity.WARN] = 'WarningMsg',
+      [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+    },
+  },
+  underline = true,
+  severity_sort = true,
+    severity = {
+    min = vim.diagnostic.severity.HINT,
+  },
+  update_in_insert = false,
+})
+
+
 
 require("lazy").setup(require("plugins"))
 require("rhuan")

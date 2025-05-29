@@ -110,7 +110,26 @@ return {
       require("mason-lspconfig").setup()  -- Configura o Mason com o LSP
 
       -- Configurações dos servidores LSP
-      require("lspconfig")["rust_analyzer"].setup{}
+      require("lspconfig")["rust_analyzer"].setup{
+        settings = {
+          ["rust-analyzer"] = {
+            diagnostics = {
+              enable = true,
+              disabled = {}, -- não desabilite warnings importantes
+            },
+            checkOnSave = {
+              command = "clippy", -- ou "check"
+            },
+            -- para ter hints, além de warnings e errors
+            diagnostics = {
+              enable = true,
+              experimental = {
+                enable = true,  -- ativa hints experimentais, se disponível
+              }
+            }
+          }
+        }
+      }
       require("lspconfig")["ts_ls"].setup{}  -- Para TypeScript
       require("lspconfig")["clangd"].setup{}   -- Para C++
       require("lspconfig")["jdtls"].setup{}    -- Para Java
