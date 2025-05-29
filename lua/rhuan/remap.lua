@@ -40,4 +40,6 @@ end, { desc = "Mostrar erro LSP flutuante" })
 -- Error do diagnostic mover o cursor pro local exato
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Próximo erro/aviso" })
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Erro/aviso anterior" })
+-- terminal
+vim.api.nvim_set_keymap('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
 

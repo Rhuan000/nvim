@@ -8,7 +8,7 @@ vim.opt.relativenumber = true  -- Enable relative line numbers
 -- enabling dianostics in files
 vim.diagnostic.config({
   virtual_text = {
-    prefix = "󰌵", -- só o símbolo, sem mensagem
+    prefix = "󰈸", -- só o símbolo, sem mensagem
     spacing =0,
      format = function(diag)
       return ""  -- retorna string vazia para não mostrar mensagem
@@ -19,6 +19,7 @@ vim.diagnostic.config({
     text = {
       [vim.diagnostic.severity.ERROR] = '',
       [vim.diagnostic.severity.WARN] = '',
+      [vim.diagnostic.severity.HINT] = '⚡',
     },
     linehl = {
       [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
@@ -26,6 +27,7 @@ vim.diagnostic.config({
     numhl = {
       [vim.diagnostic.severity.WARN] = 'WarningMsg',
       [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+      [vim.diagnostic.severity.HINT] = 'DiagnosticHint',
     },
   },
   underline = true,
@@ -33,7 +35,7 @@ vim.diagnostic.config({
     severity = {
     min = vim.diagnostic.severity.HINT,
   },
-  update_in_insert = false,
+  update_in_insert = true,
 })
 
 
