@@ -12,18 +12,16 @@ function ToggleNumber()
 end
 vim.api.nvim_set_keymap('n', '<Leader>n', ':lua ToggleNumber()<CR>', { noremap = true, silent = true })
 
-
-vim.api.nvim_set_keymap('n', '<Leader>n', ':lua ToggleNumber()<CR>', { noremap = true, silent = true })
-
 --Para controlar os arquivos em buffers/tab
 vim.keymap.set('n', '<Tab>', ':bnext<CR>')
 vim.keymap.set('n', '<S-Tab>', ':bprev<CR>')
-vim.keymap.set('n', '<leader>c', ':bdelete<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>c', ':bdelete<CR>', { noremap = true, silent = true, desc = "Delete this buffer panel"})
 
 -- trocar j por k
 vim.keymap.set('', 'j', 'k', { noremap = true })
 vim.keymap.set('', 'k', 'j', { noremap = true })
-
+-- replace comand
+vim.keymap.set('n', '<leader>r', ':%s/', {noremap = true, silent = false, desc = "replace string"})
 -- conseguir colar fora do terminal
 vim.api.nvim_set_keymap('', '<C-y>', ':w !xclip -selection clipboard<CR>', { noremap = true, silent = true })
 -- Harpoon keymap
@@ -36,10 +34,14 @@ vim.api.nvim_set_keymap('n', '<Leader>h', ':lua require("harpoon.ui").toggle_qui
 --mostrar o Erro do LSP
 vim.keymap.set("n", "<leader>i", function()
   vim.diagnostic.open_float(nil, { focusable = false })
-end, { desc = "Mostrar erro LSP flutuante" })
+end, { desc = "LSP diagnostic description" })
 -- Error do diagnostic mover o cursor pro local exato
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Próximo erro/aviso" })
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Erro/aviso anterior" })
--- terminal
-vim.api.nvim_set_keymap('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Next LSP description" })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Previous LSP description" })
 
+-- terminal
+vim.api.nvim_set_keymap('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true, desc= "Go to normal in terminal mode"})
+
+
+vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, { noremap = true, silent = true, desc = "Go to implementation"})
+vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition, { noremap = true, silent = true, desc = "Go to definition"})

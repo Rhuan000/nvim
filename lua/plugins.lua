@@ -1,4 +1,12 @@
 return {
+  --Nvim plugin to show shortcuts
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("which-key").setup()
+    end
+  },
   -- Tema
   {
     "folke/tokyonight.nvim",
@@ -7,7 +15,7 @@ return {
       vim.cmd[[colorscheme tokyonight]]
     end
   },
--- Buffer para Tabs
+  -- Buffer para Tabs
   {
     'akinsho/bufferline.nvim',
     requires = 'nvim-tree/nvim-web-devicons',
@@ -74,20 +82,20 @@ return {
           ['<C-b>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
           ['<C-Space>'] = cmp.mapping.complete(),   -- Ativa a janela de sugestão
-	  ['<Tab>'] = cmp.mapping(function(fallback)
-		if cmp.visible() then
-		   cmp.select_next_item()
-	        else
-		  fallback()
-		end
-	       end, {'i', 's'}),
-	  ['<S-Tab>'] = cmp.mapping(function(fallback)
-		if cmp.visible() then
-		  cmp.select_prev_item()
-	        else
-		  fallback()
-		end
-	      end, {'i', 's'}),
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            else
+              fallback()
+            end
+          end, {'i', 's'}),
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            else
+              fallback()
+            end
+          end, {'i', 's'}),
 
           ['<CR>'] = cmp.mapping.confirm({ select = true }),  -- Confirma a sugestão
         }),
@@ -95,8 +103,8 @@ return {
           { name = 'nvim_lsp' },  -- Fonte de autocompletar do LSP
           { name = 'luasnip' },   -- Fonte de snippets
         }, {
-          { name = 'buffer' },    -- Fonte de autocompletar do buffer
-        })
+            { name = 'buffer' },    -- Fonte de autocompletar do buffer
+          })
       })
     end
   },
