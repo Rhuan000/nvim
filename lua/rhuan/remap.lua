@@ -36,8 +36,8 @@ vim.keymap.set("n", "<leader>i", function()
   vim.diagnostic.open_float(nil, { focusable = false })
 end, { desc = "LSP diagnostic description" })
 -- Error do diagnostic mover o cursor pro local exato
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = "Next LSP description" })
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = "Previous LSP description" })
+vim.keymap.set('n', '[d', vim.diagnostic.goto_next, { desc = "Next LSP description" })
+vim.keymap.set('n', ']d', vim.diagnostic.goto_prev, { desc = "Previous LSP description" })
 
 -- terminal
 vim.api.nvim_set_keymap('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true, desc= "Go to normal in terminal mode"})
