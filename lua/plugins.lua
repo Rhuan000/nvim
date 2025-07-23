@@ -196,7 +196,7 @@ return {
         persist_size = true,
       })
     end,
-  }
+  },
   -- lazy.nvim
   {
     "windwp/nvim-autopairs",
