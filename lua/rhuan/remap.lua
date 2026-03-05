@@ -18,8 +18,8 @@ vim.keymap.set('n', '<S-Tab>', ':bprev<CR>')
 vim.keymap.set('n', '<leader>c', ':bdelete<CR>', { noremap = true, silent = true, desc = "Delete this buffer panel"})
 
 -- trocar j por k
-vim.keymap.set('', 'j', 'k', { noremap = true })
-vim.keymap.set('', 'k', 'j', { noremap = true })
+--vim.keymap.set('', 'j', 'k', { noremap = true })
+--vim.keymap.set('', 'k', 'j', { noremap = true })
 -- replace comand
 vim.keymap.set('n', '<leader>r', ':%s/', {noremap = true, silent = false, desc = "replace string"})
 -- conseguir colar fora do terminal
