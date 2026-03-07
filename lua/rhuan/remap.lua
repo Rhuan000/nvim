@@ -43,5 +43,9 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_prev, { desc = "Previous LSP descr
 vim.api.nvim_set_keymap('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true, desc= "Go to normal in terminal mode"})
 
 
-vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, { noremap = true, silent = true, desc = "Go to implementation"})
-vim.keymap.set('n', '<leader>gd', vim.lsp.buf.definition, { noremap = true, silent = true, desc = "Go to definition"})
+-- Atalhos de Navegação LSP (Rhuan Setup)
+vim.keymap.set('n', '<leader>gdf', vim.lsp.buf.definition, { noremap = true, silent = true, desc = "Go to definition" })
+vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, { noremap = true, silent = true, desc = "Go to references" })
+vim.keymap.set('n', '<leader>gdc', vim.lsp.buf.declaration, { noremap = true, silent = true, desc = "Go to declaration" })
+vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, { noremap = true, silent = true, desc = "Go to implementation" })
+
