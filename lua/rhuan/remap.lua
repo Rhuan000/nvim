@@ -48,4 +48,5 @@ vim.keymap.set('n', '<leader>gdf', vim.lsp.buf.definition, { noremap = true, sil
 vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, { noremap = true, silent = true, desc = "Go to references" })
 vim.keymap.set('n', '<leader>gdc', vim.lsp.buf.declaration, { noremap = true, silent = true, desc = "Go to declaration" })
 vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, { noremap = true, silent = true, desc = "Go to implementation" })
+vim.keymap.set('n', '<leader>gf', require('telescope.builtin').lsp_document_symbols, { desc = "Listar símbolos/funções" })
 
