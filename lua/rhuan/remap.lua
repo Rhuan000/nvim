@@ -13,9 +13,9 @@ end
 vim.api.nvim_set_keymap('n', '<Leader>n', ':lua ToggleNumber()<CR>', { noremap = true, silent = true })
 
 --Para controlar os arquivos em buffers/tab
-vim.keymap.set('n', '<Tab>', ':bnext<CR>')
-vim.keymap.set('n', '<S-Tab>', ':bprev<CR>')
-vim.keymap.set('n', '<leader>c', ':bdelete<CR>', { noremap = true, silent = true, desc = "Delete this buffer panel"})
+vim.keymap.set('n', '<M-2>', ':bnext<CR>', { noremap = true, silent = true, desc = "Next buffer" })
+vim.keymap.set('n', '<M-1>', ':bprev<CR>', { noremap = true, silent = true, desc = "Previous buffer" })
+vim.keymap.set('n', '<M-c>', ':bdelete<CR>', { noremap = true, silent = true, desc = "Delete this buffer panel"})
 
 -- trocar j por k
 --vim.keymap.set('', 'j', 'k', { noremap = true })
@@ -41,7 +41,9 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_prev, { desc = "Previous LSP descr
 
 -- terminal
 vim.api.nvim_set_keymap('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true, desc= "Go to normal in terminal mode"})
-
+vim.keymap.set("n", "<leader>tt", ":terminal<CR>", { noremap = true, silent = true, desc = "Open terminal" })
+vim.keymap.set("n", "<leader>tv", ":vsplit | terminal<CR>", { noremap = true, silent = true, desc = "Open terminal vertical" })
+vim.keymap.set("n", "<leader>th", ":split | terminal<CR>", { noremap = true, silent = true, desc = "Open terminal horizontal" })
 
 -- Atalhos de Navegação LSP (Rhuan Setup)
 vim.keymap.set('n', '<leader>gdf', vim.lsp.buf.definition, { noremap = true, silent = true, desc = "Go to definition" })
@@ -49,4 +51,7 @@ vim.keymap.set('n', '<leader>gr', vim.lsp.buf.references, { noremap = true, sile
 vim.keymap.set('n', '<leader>gdc', vim.lsp.buf.declaration, { noremap = true, silent = true, desc = "Go to declaration" })
 vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, { noremap = true, silent = true, desc = "Go to implementation" })
 vim.keymap.set('n', '<leader>gf', require('telescope.builtin').lsp_document_symbols, { desc = "Listar símbolos/funções" })
+
+
+
 

@@ -32,21 +32,41 @@ return {
       require("nvim-tree").setup({
         view = { width = 30, side = "left" },
         git = { enable = true },
-      })
+        actions = {
+          change_dir = {
+            enable = false,
+          },
+        }
+        })
     end
   },
 
   -- Treesitter (para sintaxe)
   {
     "nvim-treesitter/nvim-treesitter",
+    lazy = false,
     build = ":TSUpdate",
     config = function()
-      require("nvim-treesitter.configs").setup({
-        highlight = { enable = true },
-        indent = { enable = true },
-        ensure_installed = { "lua", "vim", "bash", "python", "rust", "java", "cpp", "typescript" }
+      require("nvim-treesitter").setup({
+        install_dir = vim.fn.stdpath("data") .. "/site",
       })
-    end
+
+      require("nvim-treesitter").install({
+        "lua",
+        "vim",
+        "vimdoc",
+        "javascript",
+        "typescript",
+        "tsx",
+        "json",
+        "html",
+        "css",
+        "java",
+        "rust",
+        "c",
+        "cpp",
+      })
+    end,
   },
 
   -- Plenary (dependência comum para outros plugins)
@@ -111,44 +131,66 @@ return {
 
   -- Configuração do LSP
   {
-    "neovim/nvim-lspconfig",
-    dependencies = { "williamboman/mason.nvim", "williamboman/mason-lspconfig.nvim" },
-    config = function()
-      require("mason").setup()  -- Inicializa o Mason
-      require("mason-lspconfig").setup()  -- Configura o Mason com o LSP
-
-      -- Configurações dos servidores LSP
-      require("lspconfig")["rust_analyzer"].setup{
-        settings = {
-          ["rust-analyzer"] = {
-            diagnostics = {
-              enable = true,
-              disabled = {}, -- não desabilite warnings importantes
-            },
-            checkOnSave = {
-              command = "clippy", -- ou "check"
-            },
-            -- para ter hints, além de warnings e errors
-            diagnostics = {
-              enable = true,
-              experimental = {
-                enable = true,  -- ativa hints experimentais, se disponível
-              }
-            }
-          }
-        }
-      }
-      require("lspconfig")["ts_ls"].setup{}  -- Para TypeScript
-      require("lspconfig")["clangd"].setup{}   -- Para C++
-      require("lspconfig")["jdtls"].setup{}    -- Para Java
-      require("lspconfig")["solidity"].setup{
-        cmd = { "solidity-language-server", "--stdio" },
-        filetypes = { "solidity" },
-        root_dir = require("lspconfig").util.root_pattern("truffle-config.js", "hardhat.config.js", ".git"),
-      }
-
-    end
+  "neovim/nvim-lspconfig",
+  dependencies = {
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
   },
+  config = function()
+    require("mason").setup()
+
+    require("mason-lspconfig").setup({
+      ensure_installed = {
+        "rust_analyzer",
+        "ts_ls",
+        "clangd",
+        "jdtls",
+        "solidity_ls",
+      },
+      automatic_enable = false,
+    })
+
+    vim.lsp.config("rust_analyzer", {
+      settings = {
+        ["rust-analyzer"] = {
+          checkOnSave = {
+            command = "clippy",
+          },
+          diagnostics = {
+            enable = true,
+            experimental = {
+              enable = true,
+            },
+          },
+        },
+      },
+    })
+
+    vim.lsp.config("ts_ls", {})
+    vim.lsp.config("clangd", {})
+
+    vim.lsp.config("solidity_ls", {
+      cmd = { "solidity-language-server", "--stdio" },
+      filetypes = { "solidity" },
+      root_dir = function(bufnr)
+        return vim.fs.root(bufnr, {
+          "truffle-config.js",
+          "hardhat.config.js",
+          ".git",
+        })
+      end,
+    })
+
+    vim.lsp.enable("rust_analyzer")
+    vim.lsp.enable("ts_ls")
+    vim.lsp.enable("clangd")
+    vim.lsp.enable("solidity_ls")
+  end,
+},
+{
+  "mfussenegger/nvim-jdtls",
+  ft = "java",
+},
 
   -- LuaSnip (snippets)
   {
