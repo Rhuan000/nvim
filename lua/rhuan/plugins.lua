@@ -7,10 +7,19 @@ return {
     end,
   },
   {
-    "folke/tokyonight.nvim",
+    "catppuccin/nvim",
     config = function()
-      vim.g.tokyonight_style = "night"
-      vim.cmd([[colorscheme tokyonight]])
+      require("catppuccin").setup({
+        flavour = "mocha",
+        integrations = {
+          dap = true,
+          gitsigns = true,
+          treesitter = true,
+          telescope = true,
+          nvimtree = true,
+        },
+      })
+      vim.cmd.colorscheme("catppuccin")
     end,
   },
   {
@@ -296,10 +305,7 @@ return {
     config = function()
       require("gitsigns").setup({
         sign_priority = 6,
-        current_line_blame = true,
-        current_line_blame_opts = {
-          delay = 300,
-        },
+        current_line_blame = false,
       })
     end,
   },
