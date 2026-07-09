@@ -1,38 +1,34 @@
 require("config")
-vim.opt.rtp:prepend("~/.config/nvim/lazy/lazy.nvim")
-vim.opt.number = true  -- Enable absolute line numbers
-vim.opt.relativenumber = true  -- Enable relative line numbers
+vim.opt.number = true -- Enable absolute line numbers
+vim.opt.relativenumber = true -- Enable relative line numbers
 
-
-
--- enabling dianostics in files
+-- Keep diagnostics readable without duplicating the virtual_text setting.
 vim.diagnostic.config({
   virtual_text = {
-    prefix = "󰈸", -- só o símbolo, sem mensagem
-    spacing =0,
-     format = function(diag)
-      return ""  -- retorna string vazia para não mostrar mensagem
+    prefix = "󰈸",
+    spacing = 0,
+    format = function()
+      return ""
     end,
   },
-  virtual_text = true,
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = '',
-      [vim.diagnostic.severity.WARN] = '',
-      [vim.diagnostic.severity.HINT] = '⚡',
+      [vim.diagnostic.severity.ERROR] = "",
+      [vim.diagnostic.severity.WARN] = "",
+      [vim.diagnostic.severity.HINT] = "⚡",
     },
     linehl = {
-      [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+      [vim.diagnostic.severity.ERROR] = "ErrorMsg",
     },
     numhl = {
-      [vim.diagnostic.severity.WARN] = 'WarningMsg',
-      [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
-      [vim.diagnostic.severity.HINT] = 'DiagnosticHint',
+      [vim.diagnostic.severity.WARN] = "WarningMsg",
+      [vim.diagnostic.severity.ERROR] = "ErrorMsg",
+      [vim.diagnostic.severity.HINT] = "DiagnosticHint",
     },
   },
   underline = true,
   severity_sort = true,
-    severity = {
+  severity = {
     min = vim.diagnostic.severity.HINT,
   },
   update_in_insert = true,
@@ -51,7 +47,7 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-require("lazy").setup(require("plugins"))
+require("lazy").setup(require("rhuan.plugins"))
 require("rhuan")
 
 
