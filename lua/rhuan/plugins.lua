@@ -75,7 +75,11 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("telescope").setup({})
+      require("telescope").setup({
+        defaults = {
+          path_display = { "smart" },
+        },
+      })
       vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { desc = "Find files" })
     end,
   },
@@ -148,7 +152,7 @@ return {
     cmd = { "CopilotChat", "CopilotChatToggle", "CopilotChatOpen", "CopilotChatClose" },
     config = function()
       require("CopilotChat").setup({
-        model = "gpt-5.4-mini",
+        model = "auto",
         auto_insert_mode = true,
         show_help = false,
         window = {
