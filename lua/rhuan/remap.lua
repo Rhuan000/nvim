@@ -93,3 +93,22 @@ map("n", "<leader>gR", vim.lsp.buf.references, { desc = "Go to references" })
 map("n", "<leader>gd", vim.lsp.buf.declaration, { desc = "Go to declaration" })
 map("n", "<leader>gi", vim.lsp.buf.implementation, { desc = "Go to implementation" })
 map("n", "<leader>gs", require("telescope.builtin").lsp_document_symbols, { desc = "Document symbols" })
+map("n", "<leader>ch", function()
+  vim.ui.select({ "incoming calls", "outgoing calls" }, {
+    prompt = "Call hierarchy",
+  }, function(choice)
+    if choice == "incoming calls" then
+      if vim.lsp.buf.incoming_calls then
+        vim.lsp.buf.incoming_calls()
+      else
+        vim.notify("Call hierarchy is not available in this Neovim version", vim.log.levels.WARN)
+      end
+    elseif choice == "outgoing calls" then
+      if vim.lsp.buf.outgoing_calls then
+        vim.lsp.buf.outgoing_calls()
+      else
+        vim.notify("Call hierarchy is not available in this Neovim version", vim.log.levels.WARN)
+      end
+    end
+  end)
+end, { desc = "Call hierarchy" })

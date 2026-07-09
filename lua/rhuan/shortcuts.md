@@ -65,6 +65,7 @@
 | `<leader>gd` | Go to declaration |
 | `<leader>gi` | Go to implementation |
 | `<leader>gs` | List document symbols |
+| `<leader>ch` | Call hierarchy menu |
 
 ## AI Chat
 
