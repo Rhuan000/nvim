@@ -73,7 +73,10 @@ return {
   { "nvim-lua/plenary.nvim" },
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope-file-browser.nvim",
+    },
     config = function()
       local telescope = require("telescope")
       local actions = require("telescope.actions")
@@ -90,7 +93,6 @@ return {
             vim.cmd("badd " .. vim.fn.fnameescape(entry.path))
           end
 
-          -- abre o último selecionado no editor
           vim.cmd("buffer " .. vim.fn.fnameescape(selections[#selections].path))
         else
           actions.select_default(prompt_bufnr)
@@ -110,151 +112,154 @@ return {
             },
           },
         },
+
+        extensions = {
+          file_browser = {
+            hijack_netrw = true,
+            grouped = true,
+            hidden = true,
+          },
+        },
       })
 
-      vim.keymap.set(
-        "n",
-        "<leader>ff",
-        "<cmd>Telescope find_files<CR>",
-        { desc = "Find files" }
-      )
+      telescope.load_extension("file_browser")
     end,
   } ,
- {
-  "saghen/blink.cmp",
-  version = "*",
-  dependencies = {
-    "L3MON4D3/LuaSnip",
-    "rafamadriz/friendly-snippets",
-  },
-  opts = {
-    keymap = {
-      preset = "default",
-
-      ["<Tab>"] = {
-        "select_next",
-        "fallback",
-      },
-
-      ["<S-Tab>"] = {
-        "select_prev",
-        "fallback",
-      },
-
-      ["<CR>"] = {
-        "accept",
-        "fallback",
-      },
-
-      -- deixa o Ctrl+y livre para o Copilot
-      ["<C-y>"] = {
-        "fallback",
-      },
+  {
+    "saghen/blink.cmp",
+    version = "*",
+    dependencies = {
+      "L3MON4D3/LuaSnip",
+      "rafamadriz/friendly-snippets",
     },
+    opts = {
+      keymap = {
+        preset = "default",
 
-    appearance = {
-      nerd_font_variant = "mono",
-    },
+        ["<Tab>"] = {
+          "select_next",
+          "fallback",
+        },
 
-    completion = {
-      documentation = {
-        auto_show = true,
-      },
+        ["<S-Tab>"] = {
+          "select_prev",
+          "fallback",
+        },
 
-      ghost_text = {
-        enabled = false,
-      },
+        ["<CR>"] = {
+          "accept",
+          "fallback",
+        },
 
-      menu = {
-        auto_show = true,
-        auto_select = false,
-      },
-    },
-
-    sources = {
-      default = {
-        "lsp",
-        "snippets",
-        "buffer",
-        "path",
-      },
-    },
-  },
-} ,
- {
-  "zbirenbaum/copilot.lua",
-  event = "InsertEnter",
-  config = function()
-    require("copilot").setup({
-      suggestion = {
-        enabled = true,
-        auto_trigger = true,
-
-        keymap = {
-          accept = "<C-y>",
-          next = "<M-]>",
-          prev = "<M-[>",
-          dismiss = "<C-n>",
+        -- deixa o Ctrl+y livre para o Copilot
+        ["<C-y>"] = {
+          "fallback",
         },
       },
 
-      panel = {
-        enabled = false,
+      appearance = {
+        nerd_font_variant = "mono",
       },
-    })
 
-    vim.keymap.set("i", "<C-y>", function()
-      local copilot = require("copilot.suggestion")
+      completion = {
+        documentation = {
+          auto_show = true,
+        },
 
-      if copilot.is_visible() then
-        copilot.accept()
-      else
-        require("blink.cmp").accept()
-      end
-    end, {
+        ghost_text = {
+          enabled = false,
+        },
+
+        menu = {
+          auto_show = true,
+          auto_select = false,
+        },
+      },
+
+      sources = {
+        default = {
+          "lsp",
+          "snippets",
+          "buffer",
+          "path",
+        },
+      },
+    },
+  } ,
+  {
+    "zbirenbaum/copilot.lua",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        suggestion = {
+          enabled = true,
+          auto_trigger = true,
+
+          keymap = {
+            accept = "<C-y>",
+            next = "<M-]>",
+            prev = "<M-[>",
+            dismiss = "<C-n>",
+          },
+        },
+
+        panel = {
+          enabled = false,
+        },
+      })
+
+      vim.keymap.set("i", "<C-y>", function()
+        local copilot = require("copilot.suggestion")
+
+        if copilot.is_visible() then
+          copilot.accept()
+        else
+          require("blink.cmp").accept()
+        end
+      end, {
       desc = "Accept Copilot or completion",
     })
   end,
 } ,
-  {
-    "CopilotC-Nvim/CopilotChat.nvim",
-    branch = "main",
-    dependencies = {
-      { "nvim-lua/plenary.nvim" },
-    },
-    cmd = { "CopilotChat", "CopilotChatToggle", "CopilotChatOpen", "CopilotChatClose" },
-    config = function()
-      require("CopilotChat").setup({
-        model = "auto",
-        auto_insert_mode = true,
-        show_help = false,
-        window = {
-          layout = "float",
-          width = 0.75,
-          height = 0.8,
-          border = "rounded",
-          title = "AI Assistant",
-        },
-        mappings = {
-          close = { normal = "q", insert = "<C-c>" },
-          reset = { normal = "<C-l>", insert = "<C-l>" },
-          submit_prompt = { normal = "<CR>", insert = "<C-s>" },
-        },
-        prompts = {
-          QuarkusReview = {
-            prompt = "Review this Quarkus/Java code for correctness, readability, and maintainability.",
-            system_prompt = "You are reviewing a Java Quarkus project. Focus on practical fixes, not broad theory.",
-            mapping = "<leader>cq",
-            description = "Review Quarkus code",
-          },
-        },
-      })
-      vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>CopilotChatToggle<CR>", { desc = "Open AI chat" })
-      vim.keymap.set({ "n", "v" }, "<leader>cr", "<cmd>CopilotChatReview<CR>", { desc = "Review selection" })
-      vim.keymap.set({ "n", "v" }, "<leader>cq", "<cmd>CopilotChatQuarkusReview<CR>", { desc = "Review Quarkus code" })
-    end,
+{
+  "CopilotC-Nvim/CopilotChat.nvim",
+  branch = "main",
+  dependencies = {
+    { "nvim-lua/plenary.nvim" },
   },
-  {
+  cmd = { "CopilotChat", "CopilotChatToggle", "CopilotChatOpen", "CopilotChatClose" },
+  config = function()
+    require("CopilotChat").setup({
+      model = "auto",
+      auto_insert_mode = true,
+      show_help = false,
+      window = {
+        layout = "float",
+        width = 0.75,
+        height = 0.8,
+        border = "rounded",
+        title = "AI Assistant",
+      },
+      mappings = {
+        close = { normal = "q", insert = "<C-c>" },
+        reset = { normal = "<C-l>", insert = "<C-l>" },
+        submit_prompt = { normal = "<CR>", insert = "<C-s>" },
+      },
+      prompts = {
+        QuarkusReview = {
+          prompt = "Review this Quarkus/Java code for correctness, readability, and maintainability.",
+          system_prompt = "You are reviewing a Java Quarkus project. Focus on practical fixes, not broad theory.",
+          mapping = "<leader>cq",
+          description = "Review Quarkus code",
+        },
+      },
+    })
+    vim.keymap.set({ "n", "v" }, "<leader>ca", "<cmd>CopilotChatToggle<CR>", { desc = "Open AI chat" })
+    vim.keymap.set({ "n", "v" }, "<leader>cr", "<cmd>CopilotChatReview<CR>", { desc = "Review selection" })
+    vim.keymap.set({ "n", "v" }, "<leader>cq", "<cmd>CopilotChatQuarkusReview<CR>", { desc = "Review Quarkus code" })
+  end,
+},
+{
   "kdheepak/lazygit.nvim",
   dependencies = {
     "nvim-lua/plenary.nvim",
@@ -268,158 +273,158 @@ return {
     )
   end,
 },
-  {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      "williamboman/mason.nvim",
-      "williamboman/mason-lspconfig.nvim",
-    },
-    config = function()
-      require("mason").setup()
+{
+  "neovim/nvim-lspconfig",
+  dependencies = {
+    "williamboman/mason.nvim",
+    "williamboman/mason-lspconfig.nvim",
+  },
+  config = function()
+    require("mason").setup()
 
-      require("mason-lspconfig").setup({
-        ensure_installed = {
-          "rust_analyzer",
-          "ts_ls",
-          "clangd",
-          "jdtls",
-          "solidity_ls",
-          "yamlls",
-        },
-        automatic_enable = false,
-      })
+    require("mason-lspconfig").setup({
+      ensure_installed = {
+        "rust_analyzer",
+        "ts_ls",
+        "clangd",
+        "jdtls",
+        "solidity_ls",
+        "yamlls",
+      },
+      automatic_enable = false,
+    })
 
-      vim.lsp.config("rust_analyzer", {
-        settings = {
-          ["rust-analyzer"] = {
-            checkOnSave = {
-              command = "clippy",
-            },
-            diagnostics = {
+    vim.lsp.config("rust_analyzer", {
+      settings = {
+        ["rust-analyzer"] = {
+          checkOnSave = {
+            command = "clippy",
+          },
+          diagnostics = {
+            enable = true,
+            experimental = {
               enable = true,
-              experimental = {
-                enable = true,
-              },
             },
           },
         },
-      })
+      },
+    })
 
-      vim.lsp.config("ts_ls", {})
-      vim.lsp.config("clangd", {})
-      vim.lsp.config("yamlls", {})
+    vim.lsp.config("ts_ls", {})
+    vim.lsp.config("clangd", {})
+    vim.lsp.config("yamlls", {})
 
-      vim.lsp.config("solidity_ls", {
-        cmd = { "solidity-language-server", "--stdio" },
-        filetypes = { "solidity" },
-        root_dir = function(bufnr)
-          return vim.fs.root(bufnr, {
-            "truffle-config.js",
-            "hardhat.config.js",
-            ".git",
-          })
-        end,
-      })
+    vim.lsp.config("solidity_ls", {
+      cmd = { "solidity-language-server", "--stdio" },
+      filetypes = { "solidity" },
+      root_dir = function(bufnr)
+        return vim.fs.root(bufnr, {
+          "truffle-config.js",
+          "hardhat.config.js",
+          ".git",
+        })
+      end,
+    })
 
-      vim.lsp.enable("rust_analyzer")
-      vim.lsp.enable("ts_ls")
-      vim.lsp.enable("clangd")
-      vim.lsp.enable("yamlls")
-      vim.lsp.enable("solidity_ls")
-    end,
+    vim.lsp.enable("rust_analyzer")
+    vim.lsp.enable("ts_ls")
+    vim.lsp.enable("clangd")
+    vim.lsp.enable("yamlls")
+    vim.lsp.enable("solidity_ls")
+  end,
+},
+{
+  "mfussenegger/nvim-jdtls",
+  ft = "java",
+},
+{
+  "mfussenegger/nvim-dap",
+  dependencies = {
+    "rcarriga/nvim-dap-ui",
+    "nvim-neotest/nvim-nio",
+    "theHamsta/nvim-dap-virtual-text",
   },
-  {
-    "mfussenegger/nvim-jdtls",
-    ft = "java",
-  },
-  {
-    "mfussenegger/nvim-dap",
-    dependencies = {
-      "rcarriga/nvim-dap-ui",
-      "nvim-neotest/nvim-nio",
-      "theHamsta/nvim-dap-virtual-text",
-    },
-    config = function()
-      local dap = require("dap")
-      local dapui = require("dapui")
+  config = function()
+    local dap = require("dap")
+    local dapui = require("dapui")
 
-      dapui.setup({
-        floating = {
-          border = "rounded",
-        },
-      })
+    dapui.setup({
+      floating = {
+        border = "rounded",
+      },
+    })
 
-      require("nvim-dap-virtual-text").setup({})
+    require("nvim-dap-virtual-text").setup({})
 
-      dap.listeners.after.event_initialized["dapui_config"] = function()
-        dapui.open()
-      end
-      dap.listeners.before.event_terminated["dapui_config"] = function()
-        dapui.close()
-      end
-      dap.listeners.before.event_exited["dapui_config"] = function()
-        dapui.close()
-      end
-    end,
-  },
-  {
-    "L3MON4D3/LuaSnip",
-    dependencies = { "rafamadriz/friendly-snippets" },
-    config = function()
-      local luasnip = require("luasnip")
-      luasnip.config.set_config({
-        history = true,
-        updateevents = "TextChanged,TextChangedI",
-      })
-    end,
-  },
-  {
-    "ThePrimeagen/harpoon",
-    config = function()
-      require("harpoon").setup({
-        global_settings = {
-          save_on_toggle = true,
-          enter_on_send = false,
-          mark_branch = true,
-        },
-      })
-    end,
-  },
-  {
-    "tpope/vim-fugitive",
-    config = function()
-    end,
-  },
-  {
-    "lewis6991/gitsigns.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("gitsigns").setup({
-        sign_priority = 6,
-        current_line_blame = false,
-      })
-    end,
-  },
-  {
-    "akinsho/toggleterm.nvim",
-    version = "*",
-    config = function()
-      require("toggleterm").setup({
-        size = 10,
-        open_mapping = [[<c-\>]],
-        direction = "horizontal",
-        shade_terminals = true,
-        shading_factor = 2,
-        start_in_insert = true,
-        persist_size = true,
-      })
-    end,
-  },
-  {
-    "windwp/nvim-autopairs",
-    event = "InsertEnter",
-    config = function()
-      require("nvim-autopairs").setup({})
-    end,
-  },
+    dap.listeners.after.event_initialized["dapui_config"] = function()
+      dapui.open()
+    end
+    dap.listeners.before.event_terminated["dapui_config"] = function()
+      dapui.close()
+    end
+    dap.listeners.before.event_exited["dapui_config"] = function()
+      dapui.close()
+    end
+  end,
+},
+{
+  "L3MON4D3/LuaSnip",
+  dependencies = { "rafamadriz/friendly-snippets" },
+  config = function()
+    local luasnip = require("luasnip")
+    luasnip.config.set_config({
+      history = true,
+      updateevents = "TextChanged,TextChangedI",
+    })
+  end,
+},
+{
+  "ThePrimeagen/harpoon",
+  config = function()
+    require("harpoon").setup({
+      global_settings = {
+        save_on_toggle = true,
+        enter_on_send = false,
+        mark_branch = true,
+      },
+    })
+  end,
+},
+{
+  "tpope/vim-fugitive",
+  config = function()
+  end,
+},
+{
+  "lewis6991/gitsigns.nvim",
+  dependencies = { "nvim-lua/plenary.nvim" },
+  config = function()
+    require("gitsigns").setup({
+      sign_priority = 6,
+      current_line_blame = false,
+    })
+  end,
+},
+{
+  "akinsho/toggleterm.nvim",
+  version = "*",
+  config = function()
+    require("toggleterm").setup({
+      size = 10,
+      open_mapping = [[<c-\>]],
+      direction = "horizontal",
+      shade_terminals = true,
+      shading_factor = 2,
+      start_in_insert = true,
+      persist_size = true,
+    })
+  end,
+},
+{
+  "windwp/nvim-autopairs",
+  event = "InsertEnter",
+  config = function()
+    require("nvim-autopairs").setup({})
+  end,
+},
 }
