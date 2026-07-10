@@ -8,6 +8,17 @@ map("n", "<leader>pv", vim.cmd.Ex, { desc = "Explore directory" })
 map("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { desc = "Find files" })
 map("n", "<leader>fe", "<cmd>NvimTreeFocus<CR>", { desc = "Focus file tree" })
 map("n", "<leader>ft", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file tree" })
+map("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", { desc = "Live grep" })
+map("n", "<leader>fd", "<cmd>NvimTreeFindFile<CR>")
+
+vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { silent = true })
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { silent = true })
+
+vim.keymap.set("i", "<A-k>", "<Esc>:m .-2<CR>==gi", { silent = true })
+vim.keymap.set("i", "<A-j>", "<Esc>:m .+1<CR>==gi", { silent = true })
+
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { silent = true })
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { silent = true })
 
 -- Layout helpers
 map("n", "<leader>wn", function()

@@ -75,14 +75,51 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("telescope").setup({
+      local telescope = require("telescope")
+      local actions = require("telescope.actions")
+      local action_state = require("telescope.actions.state")
+
+      local multi_open = function(prompt_bufnr)
+        local picker = action_state.get_current_picker(prompt_bufnr)
+        local selections = picker:get_multi_selection()
+
+        if #selections > 0 then
+          actions.close(prompt_bufnr)
+
+          for _, entry in ipairs(selections) do
+            vim.cmd("badd " .. vim.fn.fnameescape(entry.path))
+          end
+
+          -- abre o último selecionado no editor
+          vim.cmd("buffer " .. vim.fn.fnameescape(selections[#selections].path))
+        else
+          actions.select_default(prompt_bufnr)
+        end
+      end
+
+      telescope.setup({
         defaults = {
           path_display = { "smart" },
+
+          mappings = {
+            i = {
+              ["<CR>"] = multi_open,
+            },
+            n = {
+              ["<CR>"] = multi_open,
+            },
+          },
         },
       })
-      vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { desc = "Find files" })
+
+      vim.keymap.set(
+        "n",
+        "<leader>ff",
+        "<cmd>Telescope find_files<CR>",
+        { desc = "Find files" }
+      )
     end,
-  },
+  } ,
   {
     "saghen/blink.cmp",
     version = "*",
