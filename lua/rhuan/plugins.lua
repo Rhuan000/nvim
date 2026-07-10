@@ -120,66 +120,102 @@ return {
       )
     end,
   } ,
-  {
-    "saghen/blink.cmp",
-    version = "*",
-    dependencies = {
-      "L3MON4D3/LuaSnip",
-      "rafamadriz/friendly-snippets",
+ {
+  "saghen/blink.cmp",
+  version = "*",
+  dependencies = {
+    "L3MON4D3/LuaSnip",
+    "rafamadriz/friendly-snippets",
+  },
+  opts = {
+    keymap = {
+      preset = "default",
+
+      ["<Tab>"] = {
+        "select_next",
+        "fallback",
+      },
+
+      ["<S-Tab>"] = {
+        "select_prev",
+        "fallback",
+      },
+
+      ["<CR>"] = {
+        "accept",
+        "fallback",
+      },
+
+      -- deixa o Ctrl+y livre para o Copilot
+      ["<C-y>"] = {
+        "fallback",
+      },
     },
-    opts = {
-      keymap = {
-        preset = "default",
-        ["<Tab>"] = { "select_next", "fallback" },
-        ["<S-Tab>"] = { "select_prev", "fallback" },
-        ["<CR>"] = { "accept", "fallback" },
+
+    appearance = {
+      nerd_font_variant = "mono",
+    },
+
+    completion = {
+      documentation = {
+        auto_show = true,
       },
-      appearance = {
-        nerd_font_variant = "mono",
+
+      ghost_text = {
+        enabled = false,
       },
-      completion = {
-        documentation = {
-          auto_show = true,
-        },
-        ghost_text = {
-          enabled = false,
-        },
-        menu = {
-          auto_show = true,
-          auto_select = false,
-        },
+
+      menu = {
+        auto_show = true,
+        auto_select = false,
       },
-      sources = {
-        default = {
-          "lsp",
-          "snippets",
-          "buffer",
-          "path",
-        },
+    },
+
+    sources = {
+      default = {
+        "lsp",
+        "snippets",
+        "buffer",
+        "path",
       },
     },
   },
-  {
-    "zbirenbaum/copilot.lua",
-    event = "InsertEnter",
-    config = function()
-      require("copilot").setup({
-        suggestion = {
-          enabled = true,
-          auto_trigger = true,
-          keymap = {
-            accept = "<C-y>",
-            next = "<M-]>",
-            prev = "<M-[>",
-            dismiss = "<C-n>",
-          },
+} ,
+ {
+  "zbirenbaum/copilot.lua",
+  event = "InsertEnter",
+  config = function()
+    require("copilot").setup({
+      suggestion = {
+        enabled = true,
+        auto_trigger = true,
+
+        keymap = {
+          accept = "<C-y>",
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<C-n>",
         },
-        panel = {
-          enabled = false,
-        },
-      })
-    end,
-  },
+      },
+
+      panel = {
+        enabled = false,
+      },
+    })
+
+    vim.keymap.set("i", "<C-y>", function()
+      local copilot = require("copilot.suggestion")
+
+      if copilot.is_visible() then
+        copilot.accept()
+      else
+        require("blink.cmp").accept()
+      end
+    end, {
+      desc = "Accept Copilot or completion",
+    })
+  end,
+} ,
   {
     "CopilotC-Nvim/CopilotChat.nvim",
     branch = "main",
@@ -218,6 +254,20 @@ return {
       vim.keymap.set({ "n", "v" }, "<leader>cq", "<cmd>CopilotChatQuarkusReview<CR>", { desc = "Review Quarkus code" })
     end,
   },
+  {
+  "kdheepak/lazygit.nvim",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+  },
+  config = function()
+    vim.keymap.set(
+      "n",
+      "<leader>gg",
+      "<cmd>LazyGit<CR>",
+      { desc = "Open LazyGit" }
+    )
+  end,
+},
   {
     "neovim/nvim-lspconfig",
     dependencies = {
