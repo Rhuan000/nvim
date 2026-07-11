@@ -2,8 +2,8 @@ vim.g.mapleader = " "
 
 local map = vim.keymap.set
 local silent = { noremap = true, silent = true }
-map('n', '<CR>', 'm`o<Esc>``')
-map('n', '<S-CR>', 'm`O<Esc>``')
+map('n', '<CR>', "o<Esc>")
+map('n', '<BS>', "O<Esc>")
 
 -- Explorer and file navigation
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "Explore directory" })
@@ -44,7 +44,7 @@ map("n", "<M-1>", "<cmd>bprev<CR>",
 map("n", "<M-2>", "<cmd>bnext<CR>",
   vim.tbl_extend("force", silent, { desc = "Next buffer" }))
 
-map("n", "<M-c>", "<cmd>bdelete<CR>",
+map("n", "<M-c>", "<cmd>previous | bdelete #<CR>",
   vim.tbl_extend("force", silent, { desc = "Close buffer" }))
 
 
