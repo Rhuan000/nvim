@@ -118,6 +118,7 @@ return {
             hijack_netrw = true,
             grouped = true,
             hidden = true,
+            preview = false,
           },
         },
       })
