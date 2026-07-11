@@ -2,6 +2,8 @@ vim.g.mapleader = " "
 
 local map = vim.keymap.set
 local silent = { noremap = true, silent = true }
+map('n', '<CR>', 'm`o<Esc>``')
+map('n', '<S-CR>', 'm`O<Esc>``')
 
 -- Explorer and file navigation
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "Explore directory" })
@@ -196,21 +198,24 @@ map("n", "<leader>ca",
 
 
 -- Debugging
-map("n", "<F5>",
-  function() require("dap").continue() end,
-  { desc = "Debug continue" })
+map("n", "<F5>", function()
+  local dap = require("dap")
 
-map("n", "<F10>",
-  function() require("dap").step_over() end,
-  { desc = "Debug step over" })
+  if vim.bo.filetype == "java" then
+    local ok, jdtls = pcall(require, "jdtls")
+    if ok and jdtls.dap and jdtls.dap.setup_dap_main_class_configs then
+      pcall(jdtls.dap.setup_dap_main_class_configs)
+    else
+      vim.notify("jdtls nao esta pronto. Abra um arquivo Java e aguarde o LSP iniciar.", vim.log.levels.WARN)
+    end
+  end
 
-map("n", "<F11>",
-  function() require("dap").step_into() end,
-  { desc = "Debug step into" })
+  dap.continue()
+end, { desc = "Debug continue" })
 
-map("n", "<F12>",
-  function() require("dap").step_out() end,
-  { desc = "Debug step out" })
+map("n", "<F10>", function() require("dap").step_over() end, { desc = "Debug step over" })
+map("n", "<F11>", function() require("dap").step_into() end, { desc = "Debug step into" })
+map("n", "<F12>", function() require("dap").step_out() end, { desc = "Debug step out" })
 
 
 -- Terminal
@@ -231,3 +236,13 @@ map("n", "<leader>tv",
 map("n", "<leader>th",
   "<cmd>split | terminal<CR>",
   { desc = "Terminal horizontal" })
+
+-- Debugging
+map("n", "<leader>db", function() require("dap").toggle_breakpoint() end, { desc = "Toggle breakpoint" })
+map("n", "<leader>dB", function()
+  require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))
+end, { desc = "Conditional breakpoint" })
+map("n", "<leader>dr", function() require("dap").repl.open() end, { desc = "Open DAP REPL" })
+map("n", "<leader>du", function() require("dapui").toggle() end, { desc = "Toggle DAP UI" })
+map("n", "<leader>dl", function() require("dap").run_last() end, { desc = "Run last debug config" })
+
