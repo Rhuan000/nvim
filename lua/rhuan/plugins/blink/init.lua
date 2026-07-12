@@ -46,7 +46,6 @@ return {
 
         menu = {
           auto_show = true,
-          auto_select = false,
         },
       },
 

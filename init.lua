@@ -1,4 +1,5 @@
 require("config")
+vim.g.mapleader = " "
 vim.opt.number = true -- Enable absolute line numbers
 vim.opt.relativenumber = true -- Enable relative line numbers
 
@@ -47,9 +48,17 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-require("lazy").setup(require("rhuan.plugins"))
-require("rhuan")
 
+
+require("lazy").setup(
+    {
+        spec = {
+            { import = "rhuan.plugins" },
+        },
+    }
+)
+
+require("rhuan")
 -- Safe load: prevents errors if nvim-dap is not installed yet
 local status_ok, dap = pcall(require, "dap")
 if status_ok then
