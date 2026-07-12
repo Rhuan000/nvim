@@ -21,5 +21,6 @@ require("lazy").setup(
     }
 )
 
+require("ftplugin.java")
 require("rhuan")
 require("rhuan.plugins.nvim-dap.config")

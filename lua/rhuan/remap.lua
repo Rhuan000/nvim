@@ -1,7 +1,11 @@
 local map = vim.keymap.set
+
 local silent = { noremap = true, silent = true }
 map('n', '<CR>', "o<Esc>")
 map('n', '<BS>', "O<Esc>")
+map("n", "<leader>tl",  function()
+    vim.opt.relativenumber = not vim.opt.relativenumber:get()
+end, { desc = "Toggle relative line numbers" })
 
 -- Explorer and file navigation
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "Explore directory" })
