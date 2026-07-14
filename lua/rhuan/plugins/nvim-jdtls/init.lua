@@ -1,7 +1,7 @@
 return {
     {
         "mfussenegger/nvim-jdtls",
-        ft = "java",
+        ft = {"java"},
         config = function()
             local jdtls = require("jdtls")
 
