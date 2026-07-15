@@ -4,6 +4,10 @@ return {
         dependencies = { "nvim-tree/nvim-web-devicons" },
         config = function()
             require("nvim-tree").setup({
+                diagnostics = {
+                    enable = true,
+                    show_on_dirs = true,
+                },
                 view = { width = 30, side = "left" },
                 git = { enable = false},
                 actions = {
