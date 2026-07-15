@@ -247,4 +247,11 @@ end, { desc = "Conditional breakpoint" })
 map("n", "<leader>dr", function() require("dap").repl.open() end, { desc = "Open DAP REPL" })
 map("n", "<leader>du", function() require("dapui").toggle() end, { desc = "Toggle DAP UI" })
 map("n", "<leader>dl", function() require("dap").run_last() end, { desc = "Run last debug config" })
-
+map("n", "<leader>fe", function() require("telescope.builtin").diagnostics({
+    severity = vim.diagnostic.severity.ERROR,
+})
+end, { desc = "Show errors" })
+map("n", "<leader>fw", function() require("telescope.builtin").diagnostics({
+    severity = vim.diagnostic.severity.WARN,
+})
+end, { desc = "Show errors" })
