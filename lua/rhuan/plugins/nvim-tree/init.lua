@@ -5,7 +5,7 @@ return {
         config = function()
             require("nvim-tree").setup({
                 view = { width = 30, side = "left" },
-                git = { enable = true },
+                git = { enable = false},
                 actions = {
                     change_dir = {
                         enable = false,
