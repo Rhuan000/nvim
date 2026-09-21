@@ -75,6 +75,27 @@
 | `<leader>cr` | Review the selection |
 | `<C-s>` in insert mode | Trigger Copilot suggestion |
 
+## Codex: edição com revisão
+
+O Codex abre em um terminal vertical, limitado ao workspace e com pedidos de
+aprovação habilitados. As alterações ficam pendentes no working tree até serem
+revisadas. Aprovar um bloco o move para o índice do Git (staged); rejeitar um
+bloco o descarta somente após confirmação.
+
+> Para separar com clareza o que foi feito pelo Codex, prefira iniciar a sessão
+> com o working tree limpo. O Neovim mostra um aviso se já houver mudanças.
+
+| Tecla / comando | Ação |
+| --- | --- |
+| `<leader>ac` / `:Codex` | Abrir ou fechar o Codex |
+| `<leader>ar` / `:CodexReview` | Abrir revisão das mudanças pendentes |
+| `<leader>aR` / `:CodexApproved` | Ver mudanças já aprovadas (staged) |
+| `<leader>aa` | Aprovar o bloco atual; em modo visual, aprovar a seleção |
+| `<leader>ax` | Rejeitar o bloco atual, com confirmação |
+| `<leader>an` | Ir ao próximo bloco alterado |
+| `<leader>ap` | Ir ao bloco alterado anterior |
+| `:DiffviewClose` | Fechar a tela de revisão |
+
 ## Debugging
 
 | Key | Action |

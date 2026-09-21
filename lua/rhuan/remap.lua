@@ -10,7 +10,6 @@ end, { desc = "Toggle relative line numbers" })
 -- Explorer and file navigation
 map("n", "<leader>pv", vim.cmd.Ex, { desc = "Explore directory" })
 map("n", "<leader>ff", "<cmd>Telescope find_files<CR>", { desc = "Find files" })
-map("n", "<leader>fe", "<cmd>NvimTreeFocus<CR>", { desc = "Focus file tree" })
 map("n", "<leader>ft", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file tree" })
 map("n", "<leader>fg", "<cmd>Telescope live_grep<CR>", { desc = "Live grep" })
 map("n", "<leader>fd", "<cmd>NvimTreeFindFile<CR>", { desc = "Find current file" })
@@ -46,8 +45,23 @@ vim.tbl_extend("force", silent, { desc = "Previous buffer" }))
 map("n", "<M-2>", "<cmd>bnext<CR>",
 vim.tbl_extend("force", silent, { desc = "Next buffer" }))
 
-map("n", "<M-c>", "<cmd>previous | bdelete #<CR>",
+map("n", "<M-$>", "<cmd>bprevious | bdelete #<CR>",
 vim.tbl_extend("force", silent, { desc = "Close buffer" }))
+
+
+-- Window resizing. Alt stays under the left hand while the direction keys are
+-- reached by the right hand on the Corne layout, without activating a layer.
+map("n", "<M-h>", "<cmd>vertical resize -5<CR>",
+{ desc = "Decrease split width" })
+
+map("n", "<M-l>", "<cmd>vertical resize +5<CR>",
+{ desc = "Increase split width" })
+
+map("n", "<M-i>", "<cmd>resize +2<CR>",
+{ desc = "Increase split height" })
+
+map("n", "<M-m>", "<cmd>resize -2<CR>",
+{ desc = "Decrease split height" })
 
 
 -- Editing
@@ -155,18 +169,29 @@ map("n", "]d", vim.diagnostic.goto_next,
 { desc = "Next diagnostic" })
 
 
--- Copilot Chat
+-- CodeCompanion
 map({ "n", "v" }, "<leader>cc",
-"<cmd>CopilotChatToggle<CR>",
-{ desc = "Toggle AI chat" })
+"<cmd>CodeCompanionChat toggle<CR>",
+{ desc = "Open CodeCompanion chat" })
 
 map({ "n", "v" }, "<leader>cq",
-"<cmd>CopilotChatQuarkusReview<CR>",
-{ desc = "Quarkus review" })
+"<cmd>CodeCompanionCLI agent=codex Review this Quarkus code for correctness, regressions, security risks, and missing tests.<CR>",
+{ desc = "Quarkus review with Codex" })
 
 map({ "n", "v" }, "<leader>cr",
-"<cmd>CopilotChatReview<CR>",
-{ desc = "Review selection" })
+"<cmd>CodeCompanionCodeReview<CR>",
+{ desc = "Review agent changes" })
+
+map({ "n", "v" }, "<leader>cl",
+"<cmd>CodeCompanionCLI agent=codex<CR>",
+{ desc = "Open Codex via CodeCompanion" })
+
+-- In normal mode, select the current line before opening the inline assistant.
+map("n", "<leader>ci", "V<cmd>CodeCompanion<CR>",
+{ desc = "CodeCompanion inline on current line" })
+
+map("v", "<leader>ci", "<cmd>CodeCompanion<CR>",
+{ desc = "CodeCompanion inline on selection" })
 
 
 -- LSP Navigation
@@ -194,7 +219,7 @@ map("n", "<leader>gs",
 require("telescope.builtin").lsp_document_symbols,
 { desc = "Document symbols" })
 
-map("n", "<leader>ca",
+map("n", "<leader>cA",
 vim.lsp.buf.code_action,
 { desc = "Code Action" })
 
@@ -247,6 +272,19 @@ end, { desc = "Conditional breakpoint" })
 map("n", "<leader>dr", function() require("dap").repl.open() end, { desc = "Open DAP REPL" })
 map("n", "<leader>du", function() require("dapui").toggle() end, { desc = "Toggle DAP UI" })
 map("n", "<leader>dl", function() require("dap").run_last() end, { desc = "Run last debug config" })
+map({ "n", "v" }, "<leader>de", function()
+    require("dapui").eval()
+end, { desc = "Evaluate expression under cursor" })
+map({ "n", "v" }, "<leader>dw", function()
+    require("dapui").elements.watches.add()
+end, { desc = "Add expression to DAP watches" })
+map("n", "<leader>da", function()
+    require("rhuan.plugins.nvim-dap.config").attach_quarkus()
+end, { desc = "Attach debugger to Quarkus" })
+map("n", "<leader>dq", function()
+    require("rhuan.plugins.nvim-dap.config").start_quarkus()
+end, { desc = "Start Quarkus and attach debugger" })
+map("n", "<leader>dt", function() require("dap").terminate() end, { desc = "Terminate debug session" })
 map("n", "<leader>fe", function() require("telescope.builtin").diagnostics({
     severity = vim.diagnostic.severity.ERROR,
 })
@@ -254,4 +292,4 @@ end, { desc = "Show errors" })
 map("n", "<leader>fw", function() require("telescope.builtin").diagnostics({
     severity = vim.diagnostic.severity.WARN,
 })
-end, { desc = "Show errors" })
+end, { desc = "Show warnings" })

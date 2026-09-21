@@ -34,9 +34,14 @@ for _, jar in ipairs(glob_jars(java_test_jars)) do
   end
 end
 
+local root_dir = vim.fs.root(0, root_markers) or vim.fn.getcwd()
+local project_name = vim.fn.fnamemodify(root_dir, ":t"):gsub("[^%w_.-]", "_")
+local workspace_dir = vim.fn.stdpath("cache") .. "/jdtls/" .. project_name
+
 local config = {
-  cmd = { "jdtls" },
-  root_dir = vim.fs.root(0, root_markers),
+  name = "jdtls",
+  cmd = { "jdtls", "-data", workspace_dir },
+  root_dir = root_dir,
   init_options = {
     bundles = bundles,
   },
