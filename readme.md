@@ -1,4 +1,4 @@
-# Neovim do Rhuan
+# Neovim
 
 Configuração pessoal para desenvolvimento com Java/Quarkus, Rust, TypeScript,
 C/C++, Solidity e YAML. Inclui LSP, Treesitter, Telescope, Git, CodeCompanion,
