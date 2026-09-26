@@ -3,6 +3,7 @@ vim.g.mapleader = " "
 vim.opt.tabstop = 4        -- Número de espaços que um Tab representa
 vim.opt.shiftwidth = 4     -- Número de espaços para auto-indentar
 vim.opt.expandtab = true   -- Usa espaços ao invés de tabs
+vim.opt.diffopt:append("iwhiteeol") -- Ignora diferenças de CRLF/LF no diff
 
 vim.opt.number = true -- Enable absolute line numbers
 vim.opt.relativenumber = true -- Enable relative line numbers
